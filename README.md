@@ -1,4 +1,4 @@
-# 💼 User Management API
+# 💼 User Management 
 
 A RESTful web service for managing users — built with Spring Boot. This project demonstrates best practices for creating, retrieving, filtering, and paginating user data, along with Swagger/OpenAPI documentation.
 
@@ -179,8 +179,68 @@ jdbc:h2:mem:testdb
 ```
 
 ## Run Tests
+
 ```
 ./mvnw test
 ```
 ---
+
+# Caching  
+Dependency of  Caching in  pom.xml
+
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+```
+
+#  Docker
+Spring Boot Maven Plugin (in pom.xml):
+
+```
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+    </plugins>
+</build>
+
+
+```
+### Dockerfile
+
+```
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+COPY target/user-management-application-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+```
+#### How to Build & Run with Docker
+##### Build the project:
+```
+./mvnw clean install
+```
+##### Check target directory:
+```
+target/user-management-application-0.0.1-SNAPSHOT.jar
+```
+##### Build Docker image:
+```
+docker build -t user-management-app .
+```
+##### Run the container:
+```
+docker run -p 8080:8080 user-management-app
+```
+
 

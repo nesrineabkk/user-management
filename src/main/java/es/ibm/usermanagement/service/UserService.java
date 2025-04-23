@@ -5,12 +5,13 @@ import es.ibm.usermanagement.dto.UserRequest;
 import es.ibm.usermanagement.entity.User;
 import es.ibm.usermanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -32,13 +33,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    @Cacheable(value = "users", key = "{#firstName, #age, #pageable.pageNumber, #pageable.pageSize}")
     public Page<User> searchUsers(String firstName, Integer age, Pageable pageable) {
         return userRepository.searchUsers(firstName, age, pageable);
     }
 
+    @Cacheable("allUsers")
     public List<User> getAllUsers() {
         return userRepository.findAll();
 
     }
+
 }
