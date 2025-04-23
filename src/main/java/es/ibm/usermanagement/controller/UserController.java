@@ -24,20 +24,21 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/search")
-    public Page<User> searchUsers(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) Integer age,
-            Pageable pageable) {
-        return userService.searchUsers(firstName, age, pageable);
+    public ResponseEntity<Page<User>> searchUsers(@RequestParam(required = false) String firstName,
+                                                  @RequestParam(required = false) Integer age,
+                                                  Pageable pageable) {
+        Page<User> users = userService.searchUsers(firstName, age, pageable);
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest userDTO) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserRequest userDTO) {
         User createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
     }

@@ -32,9 +32,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserByUuid(String uuid) {
-        return userRepository.findById(uuid);
-    }
 
     public Page<User> searchUsers(String firstName, Integer age, Pageable pageable) {
         return userRepository.searchUsers(firstName, age, pageable);
