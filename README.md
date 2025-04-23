@@ -46,9 +46,7 @@ src/
 └── test/
     ├── java/
     │   └── es.ibm.usermanagement/
-    │       ├── service/       → UserServiceTest (JUnit & Mockito tests)
     │       ├── controller/    → UserControllerTest (MockMvc tests)
-    │       └── repository/    → UserRepositoryTest (Integration tests)
 
 ```
 
