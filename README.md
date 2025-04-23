@@ -16,15 +16,16 @@ A RESTful web service for managing users — built with Spring Boot. This projec
 
 ##  Tech Stack
 
-| Component           | Version        |
-|---------------------|----------------|
-| Java                | 17+            |
-| Spring Boot         | 3.x            |
-| Spring Web          | ✅             |
-| Spring Data JPA     | ✅             |
-| H2 Database         | ✅             |
-| Springdoc OpenAPI   | 2.2.0          |
-| Maven               | ✅             |
+| Component           | Version |
+|---------------------|------|
+| Java                | 17   |
+| Spring Boot         | 3.1.5 |
+| Spring Web          | ✅    |
+| Spring Data JPA     | ✅    |
+| H2 Database         | ✅    |
+| Maven   | ✅  |
+| JUnit 5 |	✅ |
+| Mockito	 | ✅ |
 
 ---
 
@@ -35,13 +36,20 @@ src/
 └── main/
     ├── java/
     │   └── es.ibm.usermanagement/
-    │       ├── controller/    UserController
-    │       ├── service/       UserService
-    │       ├── repository/    UserRepository → Data access (JPA)
-    │       ├── entity/        User → JPA entities 
-    │       └── dto/           UserRequest
-    └── resources/
-        └── application.yml
+    │       ├── controller/    → UserController
+    │       ├── service/       → UserService
+    │       ├── repository/    → UserRepository → Data access (JPA)
+    │       ├── entity/        → User → JPA entities 
+    │       └── dto/           → UserRequest (DTO for creating users)
+└── resources/
+    └── application.yml
+└── test/
+    ├── java/
+    │   └── es.ibm.usermanagement/
+    │       ├── service/       → UserServiceTest (JUnit & Mockito tests)
+    │       ├── controller/    → UserControllerTest (MockMvc tests)
+    │       └── repository/    → UserRepositoryTest (Integration tests)
+
 ```
 
 ---
@@ -68,7 +76,7 @@ Or from your IDE (IntelliJ, Eclipse).
 
 ---
 
-## 📨 Example JSON for Creating a User
+##  Example JSON for Creating a User
 
 ```json
 POST /api/users
@@ -85,31 +93,31 @@ Content-Type: application/json
 
 ---
 
-## 📃 View Users + Filter + Paginate
+##  View Users + Filter + Paginate
 
-### ➕ List all users
+### List all users
 ```http
 GET /api/users/search
 ```
 
-### 🔍 Filter by first name
+###  Filter by first name
 ```http
 GET /api/users/search?firstName=Nesrine
 ```
 
-### 🔍 Filter by age
+###  Filter by age
 ```http
 GET /api/users/search?age=26
 ```
 
-### 🔍 Filter by both + paginate
+###  Filter by both + paginate
 ```http
 GET /api/users/search?firstName=Nesrine&age=26&page=0&size=5&sort=firstName,asc
 ```
 
 ---
 
-## 📉 Swagger / OpenAPI Docs
+## Swagger / OpenAPI Docs
 
 Thanks to **Springdoc OpenAPI**, you can explore and test the API interactively.
 
@@ -139,7 +147,7 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
-## 🗃️ H2 Database Console
+##  H2 Database Console
 
 Access the in-memory database via:
 
@@ -154,5 +162,27 @@ jdbc:h2:mem:testdb
 **Username:** `sa`  
 **Password:** *(leave empty)*
 
+###  JUnit 5 and Mockito Testing
+#### Added Libraries for Testing
+
+```
+<!-- Spring Boot Test (includes Mockito, MockMvc, etc.) -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-test</artifactId>
+  <scope>test</scope>
+  <exclusions>
+    <exclusion>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+    </exclusion>
+  </exclusions>
+</dependency>
+```
+
+## Run Tests
+```
+./mvnw test
+```
 ---
 
