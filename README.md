@@ -1,4 +1,4 @@
-# 💼 User Management 
+**# 💼 User Management 
 
 A RESTful web service for managing users — built with Spring Boot. This project demonstrates best practices for creating, retrieving, filtering, and paginating user data, along with Swagger/OpenAPI documentation.
 
@@ -33,20 +33,22 @@ A RESTful web service for managing users — built with Spring Boot. This projec
 
 ```
 src/
-└── main/
-    ├── java/
-    │   └── es.ibm.usermanagement/
-    │       ├── controller/    → UserController
-    │       ├── service/       → UserService
-    │       ├── repository/    → UserRepository → Data access (JPA)
-    │       ├── entity/        → User → JPA entities 
-    │       └── dto/           → UserRequest (DTO for creating users)
-└── resources/
-    └── application.yml
-└── test/
-    ├── java/
-    │   └── es.ibm.usermanagement/
-    │       ├── controller/    → UserControllerTest (MockMvc tests)
+├── main/
+│   ├── java/
+│   │   └── es.ibm.usermanagement/
+│   │       ├── controller/       → UserController, UserAuditController
+│   │       ├── service/          → UserService, UserAuditService
+│   │       ├── repository/       → UserRepository, UserAuditRepository
+│   │       ├── entity/           → User, UserAudit
+│   │       ├── config/           → CacheConfig
+│   │       └── dto/              → UserRequest
+│   └── resources/
+│       └── application.yml
+├── test/
+│   └── java/
+│       └── es.ibm.usermanagement/
+│           ├── controller/       → UserControllerTest
+├── Dockerfile                    → Docker support
 
 ```
 
@@ -74,9 +76,10 @@ Or from your IDE (IntelliJ, Eclipse).
 
 ---
 
-##  Example JSON for Creating a User
+##  Example JSON for Creating a User json
 
-```json
+```
+
 POST /api/users
 Content-Type: application/json
 
@@ -119,7 +122,7 @@ GET /api/users/search?firstName=Nesrine&age=26&page=0&size=5&sort=firstName,asc
 
 Thanks to **Springdoc OpenAPI**, you can explore and test the API interactively.
 
-### 📦 Added Swagger Library
+### Added Swagger Library
 
 ```xml
 <dependency>
@@ -129,7 +132,7 @@ Thanks to **Springdoc OpenAPI**, you can explore and test the API interactively.
 </dependency>
 ```
 
-### 🌐 Access Swagger UI
+###  Access Swagger UI
 
 After starting the app, open:
 
@@ -144,25 +147,19 @@ http://localhost:8080/swagger-ui/index.html
 ![Swagger UI Screenshot](./asstes/swagger.PNG)
 
 ---
-
 ##  H2 Database Console
-
 Access the in-memory database via:
-
 ```
 http://localhost:8080/h2-console
 ```
-
 **JDBC URL:**
 ```
 jdbc:h2:mem:testdb
 ```
 **Username:** `sa`  
 **Password:** *(leave empty)*
-
 ###  JUnit 5 and Mockito Testing
 #### Added Libraries for Testing
-
 ```
 <!-- Spring Boot Test (includes Mockito, MockMvc, etc.) -->
 <dependency>
@@ -177,17 +174,13 @@ jdbc:h2:mem:testdb
   </exclusions>
 </dependency>
 ```
-
 ## Run Tests
-
 ```
 ./mvnw test
 ```
 ---
-
 # Caching  
 Dependency of  Caching in  pom.xml
-
 ```
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -208,11 +201,8 @@ Spring Boot Maven Plugin (in pom.xml):
         </plugin>
     </plugins>
 </build>
-
-
 ```
 ### Dockerfile
-
 ```
 FROM eclipse-temurin:17-jdk-alpine
 
@@ -242,5 +232,19 @@ docker build -t user-management-app .
 ```
 docker run -p 8080:8080 user-management-app
 ```
-
-
+## Caching
+Library used:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+```
+## Implementing an Audit Mechanism
+A custom audit system that records when and how user records are created. This helps ensure data traceability, regulatory compliance, and supports debugging and monitoring.
+#### Example Use (Create User)
+```
+User savedUser = userRepository.save(user);
+UserAudit audit = new UserAudit(savedUser.getUuid(), UserAudit.AuditAction.CREATE, LocalDateTime.now());
+userAuditRepository.save(audit);
+```
