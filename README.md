@@ -1,6 +1,6 @@
-**# 💼 User Management 
+# 💼 User Management 
 
-A RESTful web service for managing users — built with Spring Boot. This project demonstrates best practices for creating, retrieving, filtering, and paginating user data, along with Swagger/OpenAPI documentation.
+A RESTful web service built with Spring Boot and Java 17, designed for managing users in an in-memory H2 database. This application showcases best practices for creating, retrieving, filtering (by age and first name), and paginating user data. It also includes interactive Swagger/OpenAPI documentation for easy testing and exploration of the API endpoints.
 
 ---
 
@@ -91,10 +91,12 @@ Content-Type: application/json
   "postal_code": "29014"
 }
 ```
+![Swagger UI Screenshot](./asstes/addUser.PNG)
+
 
 ---
 
-##  View Users + Filter + Paginate
+##  View Users & Filter & Paginate
 
 ### List all users
 ```http
@@ -115,6 +117,14 @@ GET /api/users/search?age=26
 ```http
 GET /api/users/search?firstName=Nesrine&age=26&page=0&size=5&sort=firstName,asc
 ```
+![Swagger UI Screenshot](./asstes/search.PNG)
+
+![Swagger UI Screenshot](./asstes/resultofsearch.PNG)
+
+###  View all Users
+
+![Swagger UI Screenshot](./asstes/viewUser.PNG)
+
 
 ---
 
@@ -158,6 +168,12 @@ jdbc:h2:mem:testdb
 ```
 **Username:** `sa`  
 **Password:** *(leave empty)*
+
+⚠️ Note: If you encounter an issue with the H2 database (e.g., startup errors), try deleting the following files from the database folder:
+`testdb.mv.db`
+`testdb.trace.db`
+
+Then restart the application.
 ###  JUnit 5 and Mockito Testing
 #### Added Libraries for Testing
 ```
@@ -188,10 +204,8 @@ Dependency of  Caching in  pom.xml
 </dependency>
 
 ```
-
 #  Docker
 Spring Boot Maven Plugin (in pom.xml):
-
 ```
 <build>
     <plugins>
