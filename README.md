@@ -262,3 +262,6 @@ User savedUser = userRepository.save(user);
 UserAudit audit = new UserAudit(savedUser.getUuid(), UserAudit.AuditAction.CREATE, LocalDateTime.now());
 userAuditRepository.save(audit);
 ```
+
+## Contact
+If you have any questions or need assistance, feel free to reach out via email: `nesrine.abdelkarim98@gmail.com`
